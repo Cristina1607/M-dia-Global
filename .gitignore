@@ -1,0 +1,21 @@
+# Diretórios de ambiente virtual
+venv/
+env/
+
+# Arquivos de compilação
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# IDEs comuns
+.idea/
+.vscode/
+
+# Arquivos de logs
+*.log
+
+# Arquivos temporários do sistema
+*.swp
+.DS_Store
+Thumbs.db

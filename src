@@ -1,0 +1,111 @@
+import tkinter as tk
+from tkinter import messagebox
+
+def calcular_nota_necessaria():
+    disciplinas = [
+        "Educação Física", "Língua Estrangeira - Inglês", "Língua Portuguesa e Literatura", "Arte", "Biologia",
+        "Física", "Química", "Conhecimentos Científicos em Ciências da Natureza", 
+        "Experimentos e Outras Práticas Investigativas", "Geografia", "História", "Sociologia", "Filosofia", 
+        "Matemática", "Língua Estrangeira - Espanhol", "Projeto de Vida"
+    ]
+
+    soma_notas = 0
+    for i, disciplina in enumerate(disciplinas):
+        try:
+            # Verifica se as entradas de notas não estão vazias
+            nota1 = entry_notas[i][0].get().strip()
+            nota2 = entry_notas[i][1].get().strip()
+
+            # Se as notas não estiverem vazias, tenta convertê-las para float
+            if nota1 and nota2:
+                nota1 = float(nota1)
+                nota2 = float(nota2)
+
+                # Valida as notas
+                if not (0 <= nota1 <= 10) or not (0 <= nota2 <= 10):
+                    messagebox.showerror("Erro", f"Notas devem estar entre 0 e 10 para {disciplina}")
+                    return
+                
+                soma_notas += nota1 + nota2
+            elif nota1:  # Se só a primeira nota for preenchida
+                nota1 = float(nota1)
+                if not (0 <= nota1 <= 10):
+                    messagebox.showerror("Erro", f"A nota deve estar entre 0 e 10 para {disciplina} (1º Trimestre)")
+                    return
+                soma_notas += nota1
+            elif nota2:  # Se só a segunda nota for preenchida
+                nota2 = float(nota2)
+                if not (0 <= nota2 <= 10):
+                    messagebox.showerror("Erro", f"A nota deve estar entre 0 e 10 para {disciplina} (2º Trimestre)")
+                    return
+                soma_notas += nota2
+
+        except ValueError:
+            messagebox.showerror("Erro", f"Insira valores numéricos válidos para {disciplina}")
+            return
+    
+    # Exibe a soma das notas dos dois primeiros trimestres
+    messagebox.showinfo("Resultado", f"Soma das notas dos dois primeiros trimestres: {soma_notas:.2f}")
+    
+    # Calcula os pontos faltantes para atingir 288 pontos
+    pontos_faltantes = 288 - soma_notas
+    if pontos_faltantes <= 0:
+        messagebox.showinfo("Resultado", "Parabéns, você já atingiu os pontos necessários para aprovação!")
+        return
+    
+    # Calcula a nota necessária em cada disciplina no terceiro trimestre
+    nota_necessaria_por_disciplina = pontos_faltantes / len(disciplinas)
+
+    # Exibe a quantidade de pontos faltantes e a nota necessária por disciplina
+    messagebox.showinfo("Resultado", f"Pontos faltantes para atingir 288: {pontos_faltantes:.2f}\n"
+                                     f"Você precisa de {nota_necessaria_por_disciplina:.2f} pontos em cada disciplina no terceiro trimestre.")
+
+# Criação da interface gráfica
+root = tk.Tk()
+root.title("Cálculo de Nota Necessária para Aprovação")
+root.geometry("700x600")
+
+# Define a cor de fundo da janela principal
+root.config(bg="#5c5f63")
+
+# Título da interface
+titulo = tk.Label(root, text="Informe as notas do primeiro e segundo trimestre para cada disciplina:", font=("Arial", 12), bg="#5c5f63", fg="white")
+titulo.pack(pady=10)
+
+# Frame para os campos de entrada
+frame = tk.Frame(root, bg="#5c5f63")
+frame.pack()
+
+# Labels e campos de entrada para as disciplinas
+disciplinas = [
+    "Educação Física", "Língua Estrangeira - Inglês", "Língua Portuguesa e Literatura", "Arte", "Biologia",
+    "Física", "Química", "Conhec. Científicos em Ciências da Natureza", 
+    "Experim. e Outras Práticas Investigativas", "Geografia", "História", "Sociologia", "Filosofia", 
+    "Matemática", "Língua Estrangeira - Espanhol", "Projeto de Vida"
+]
+
+entry_notas = []
+
+for disciplina in disciplinas:
+    row_frame = tk.Frame(frame, bg="#5c5f63")
+    row_frame.pack(fill="x", pady=5)
+
+    # Label para o nome da disciplina
+    label = tk.Label(row_frame, text=disciplina, width=40, anchor="w", bg="#5c5f63", fg="white")
+    label.pack(side="left")
+
+    # Campos de entrada para o 1º e 2º trimestre
+    entry1 = tk.Entry(row_frame, width=5, bg="#d1d3d3")
+    entry1.pack(side="left", padx=10)
+    entry2 = tk.Entry(row_frame, width=5, bg="#d1d3d3")
+    entry2.pack(side="left", padx=10)
+
+    # Armazena as entradas para cada disciplina
+    entry_notas.append((entry1, entry2))
+
+# Botão para calcular a nota necessária
+btn_calcular = tk.Button(root, text="Calcular Nota Necessária no 3º Trimestre", command=calcular_nota_necessaria, bg="#d1d3d3", fg="black")
+btn_calcular.pack(pady=20)
+
+# Executa a interface
+root.mainloop()
